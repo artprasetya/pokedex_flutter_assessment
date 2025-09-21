@@ -66,5 +66,18 @@ class PokedexBloc extends Bloc<PokedexEvent, PokedexState> {
   FutureOr<void> _searchPokemonEvent(
     SearchPokemonEvent event,
     Emitter<PokedexState> emit,
-  ) {}
+  ) {
+    emit(state.copyWith(isLoading: true));
+
+    final filtered =
+        _allPokemons
+            .where(
+              (pokemon) =>
+                  pokemon.name?.toLowerCase().contains(event.pokemonName) ??
+                  false,
+            )
+            .toList();
+
+    emit(state.copyWith(isLoading: false, pokemons: filtered));
+  }
 }

@@ -4,6 +4,7 @@ import 'package:pokedex_flutter_assessment/pokedex/domain/entities/pokemon_entit
 import 'package:pokedex_flutter_assessment/pokedex/presentation/bloc/pokedex_list/pokedex_bloc.dart';
 import 'package:pokedex_flutter_assessment/pokedex/presentation/pages/detail/pokemon_detail_page.dart';
 import 'package:pokedex_flutter_assessment/pokedex/presentation/pages/list/widgets/pokemon_grid.dart';
+import 'package:pokedex_flutter_assessment/utils/debouncer.dart';
 
 class PokemonListPage extends StatefulWidget {
   const PokemonListPage({super.key});
@@ -14,6 +15,7 @@ class PokemonListPage extends StatefulWidget {
 
 class _PokemonListPageState extends State<PokemonListPage> {
   final ScrollController _controller = ScrollController();
+  final Debouncer _debouncer = Debouncer(milliseconds: 1000);
 
   @override
   void initState() {
@@ -29,6 +31,12 @@ class _PokemonListPageState extends State<PokemonListPage> {
         _controller.position.maxScrollExtent - 200) {
       context.read<PokedexBloc>().add(LoadMorePokemonsEvent());
     }
+  }
+
+  void _onSearch(String query) {
+    _debouncer.run(() {
+      context.read<PokedexBloc>().add(SearchPokemonEvent(pokemonName: query));
+    });
   }
 
   @override
@@ -55,6 +63,17 @@ class _PokemonListPageState extends State<PokemonListPage> {
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // Search
+              TextField(
+                onSubmitted: _onSearch,
+                onChanged: _onSearch,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Search by Name',
                 ),
               ),
               const SizedBox(height: 16),
