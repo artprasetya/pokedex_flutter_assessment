@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pokedex_flutter_assessment/pokedex/presentation/bloc/pokedex_list/pokedex_bloc.dart';
+import 'package:pokedex_flutter_assessment/pokedex/presentation/pages/list/pokemon_list_page.dart';
+import 'package:pokedex_flutter_assessment/services/service_locator.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupServiceLocator();
+
   runApp(const MainApp());
 }
 
@@ -9,11 +16,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return BlocProvider(
+      create: (context) => getIt<PokedexBloc>(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Pokedex Flutter Assessment',
+        home: const PokemonListPage(),
       ),
     );
   }
