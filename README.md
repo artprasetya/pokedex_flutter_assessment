@@ -18,7 +18,7 @@ A simple Pokedex mobile app built with Flutter for the technical assessment at S
 
 To get started with the Pokedex Flutter Assessment, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/your-username/pokedex_flutter_assessment.git`
+1. Clone the repository: `git clone git@github.com:artprasetya/pokedex_flutter_assessment.git`
 2. Install dependencies: `flutter pub get`
 3. Run the application: `flutter run`
 
